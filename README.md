@@ -2,9 +2,7 @@
 
 👋 Seja bem-vindo(a)!
 
-É muito bom tê-lo(a) aqui. Tenho certeza que você vai amar esse curso. ❤️
-
-## O que você vai aprender?
+## O que eu aprendi?
 
 - Como configurar um projeto Cypress do zero
 - Como visitar páginas locais e remotas
@@ -18,6 +16,28 @@
 - Como criar uma documentação mínima para seu projeto de testes automatizados
 - Como executar os testes em um _workflow_ de integração contínua sempre que mudanças ocorrerem no código da aplicação (ou dos testes)
 - Como integrar seu _workflow_ de integração contínua com o Cypress Cloud (o serviço de gestão de testes do Cypress na nuvem)
+
+# Pré-requisitos
+
+Para a realização do curso, há sistemas que precisam estar instalados, os quais são listados abaixo.
+
+## Sistemas
+
+Antes de começar, certifique-se de que os seguintes sistemas estejam instalados em seu computador.
+
+- [git](https://git-scm.com/) (`2.42.1` no momento da redação deste artigo)
+- [Node.js](https://nodejs.org/en/) (`v20.13.1` no momento da redação deste artigo)
+- npm (`10.8.1` no momento da redação deste artigo)
+- [Visual Studio Code](https://code.visualstudio.com/) (`v1.90.2` no momento da redação deste artigo) ou alguma outra IDE de sua preferência
+
+> **Obs.:** Recomendo usar as mesmas versões ou versões mais recentes de suporte de longo prazo (LTS) dos sistemas listados acima.
+>
+> **Obs. 2:** Ao instalar o Node.js, o npm é instalado junto. 🎉
+>
+> **Obs. 3:** Para verificar as versões do git, Node.js e npm instaladas em seu computador, execute o comando `git --version && node --version && npm --version` em seu terminal de linha de comando.
+>
+> **Obs. 4:** Deixei links para os instaladores na lista de requisitos acima, caso você ainda não os tenha instalados.
+
 
 ## Vamos começar?
 
