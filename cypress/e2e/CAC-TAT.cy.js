@@ -9,17 +9,24 @@ it('verificar o titulo da aplicacao', ()=>{
  })
 
 it('exercicio 1: preencher os campos obrigatorios e enviar o formulario', ()=>{
+  cy.clock()
   const longText = Cypress._.repeat('abcdefghijklmnopqrstuvwxyz', 10)
+  
   cy.get('#firstName').type('Vinicius')
   cy.get('#lastName').type('Pedrini')
   cy.get('#email').type('vini@premier.com')
   cy.get('#open-text-area').type(longText, { delay: 0 })
   cy.get('button[type="submit"]').click()
-
+  
   cy.get('.success').should('be.visible')
+
+  cy.tick(3000)
+
+  cy.get('.success').should('not.be.visible')
 })
 
 it('exercicio 2: exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', ()=>{
+  cy.clock()
   cy.get('#firstName').type('vinicius')
   cy.get('#lastName').type('Pedrini')
   cy.get('#email').type('vinipremier,com')
@@ -27,6 +34,11 @@ it('exercicio 2: exibe mensagem de erro ao submeter o formulário com um email c
   cy.get('button[type="submit"]').click()
   
   cy.get('.error').should('be.visible')
+
+  cy.tick(3000)
+
+  cy.get('.error').should('not.be.visible')
+
 })
 
 it('exercicio 3: validacao do telefone', ()=>{
@@ -36,6 +48,7 @@ it('exercicio 3: validacao do telefone', ()=>{
    
 })
 it('exercicio 4: exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário',()=>{
+  cy.clock()
   cy.get('#firstName').type('vinicius')
   cy.get('#lastName').type('Pedrini')
   cy.get('#email').type('vinipremier,com')
@@ -44,16 +57,27 @@ it('exercicio 4: exibe mensagem de erro quando o telefone se torna obrigatório 
   cy.get('button[type="submit"]').click()
   
   cy.get('.error').should('be.visible')
+
+  cy.tick(3000)
+
+  cy.get('.error').should('not.be.visible')
+
  })
 
 it('exercicio 6: msg erro clicando submit sem preencher nada', ()=>{
+  cy.clock()
   cy.get('button[type="submit"]').click()
   
   cy.get('.error').should('be.visible')
 
+  cy.tick(3000)
+
+  cy.get('.error').should('not.be.visible')
+
 })
 
 it('exercicio 7.1: envia o formuário com sucesso usando um comando customizado', () => {
+  cy.clock()
   const data = {
     FirstName: 'Vinicius',
     LastName: 'Pedrini',
@@ -63,17 +87,24 @@ it('exercicio 7.1: envia o formuário com sucesso usando um comando customizado'
   cy.fillMandatoryFieldsAndSubmit(data)
 
   cy.get('.success').should('be.visible')
+
+  cy.tick(3000)
+
+  cy.get('.success').should('not.be.visible')
 })
 
 it('exercicio 7.3 envia o formuário com sucesso usando um comando customizado', () => {
+  cy.clock()
   cy.fillMandatoryFieldsAndSubmit()
-
+  
   cy.get('.success').should('be.visible')
 
+  cy.tick(3000)
+
+  cy.get('.success').should('not.be.visible')
+
   })
-
 })
-
 describe('section 4: central de atendimento ao cliente TAT',() =>{
 
 beforeEach(() => {
@@ -85,13 +116,13 @@ it('seleciona um produto (YouTube) por seu texto', ()=>{
   .select('YouTube')
   .should('have.value', 'youtube')
 
-  })
+})
 it('seleciona um produto (metoria) pelo value', ()=>{
   cy.get('#product')
   .select('mentoria')
   .should('have.value', 'mentoria')
   
-  })
+})
 
 it('seleciona um produto (blog) por seu indice', ()=>{
   cy.get('#product')
@@ -139,10 +170,12 @@ describe('section 6 (CHECKBOX): central de atendimento ao cliente TAT',() =>{
 
   })
   it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', ()=>{
+    cy.clock()
     cy.get('#phone-checkbox').check()
     cy.get('.button').click()
-
     cy.get('.error').should('be.visible')
+    cy.tick(3000)
+    cy.get('.error').should('not.be.visible')
   })
 })
 
@@ -194,14 +227,55 @@ describe('section 8 (LINKS que abrem em outra pagina): central de atendimento ao
       .click()
       cy.contains('h1', 'CAC TAT - Política de Privacidade').should('be.visible')
     })
-
   })
 
-describe('section 9 (simulando dimensoes de um dispositivo movel): central de atendimento ao cliente TAT',() =>{
+describe('section 13 (invoke e requisicao HTTP)',() =>{
 
     beforeEach(() => {
       cy.visit('./src/index.html')
     })
+    it('exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
+      cy.get('.success')
+        .should('not.be.visible')
+        .invoke('show')
+        .should('be.visible')
+        .and('contain', 'Mensagem enviada com sucesso.')
+        .invoke('hide')
+        .should('not.be.visible')
+      cy.get('.error')
+        .should('not.be.visible')
+        .invoke('show')
+        .should('be.visible')
+        .and('contain', 'Valide os campos obrigatórios!')
+        .invoke('hide')
+        .should('not.be.visible')
+    })
 
+    it('preenche o campo da área de texto usando o comando invoke', () => {
+      cy.get('#open-text-area')
+      .invoke('val', 'um texto qualquer')
+      .should('have.value', 'um texto qualquer')
+    })
+    
+    it('faz requisicao HTTP', () => {
+      cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+        .as('getRequest')
+        .its('status')
+        .should('be.equal', 200)
+      cy.get('@getRequest')
+        .its('statusText')
+        .should('be.equal', 'OK')
+      cy.get('@getRequest')
+        .its('body')
+        .should('include', 'CAC TAT')
+    
+    })
+
+    it('encontre o gato com invoke', () => {
+      cy.get('#cat')
+      .invoke('show')
+      .should('be.visible')
+
+    })
 
   })
